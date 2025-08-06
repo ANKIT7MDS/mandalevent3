@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>संयोजक जोड़ें</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: #ffedd2; font-family: 'Segoe UI', Arial, sans-serif; }
+        .container { max-width: 450px; margin: 40px auto; background: #ffd89b; border-radius: 16px; box-shadow: 0 2px 16px #ff980044; padding: 36px 22px 28px 22px; }
+        h1 { color: #e65100; text-align: center; margin-bottom: 18px; }
+        .form-group { display: flex; flex-direction: column; margin-bottom: 18px; }
+        label { margin-bottom: 6px; font-weight: 500; color: #b85c00; }
+        input, select, textarea { padding: 11px 10px; border-radius: 6px; border: 1.5px solid #ffc27b; background: #fffdf6; font-size: 1.1rem; outline: none; transition: border 0.2s; }
+        input:focus, select:focus, textarea:focus { border-color: #ff9800; background: #fff7e0; }
+        button, input[type="submit"] { width: 100%; background: #ff9800; color: #fff; border: none; border-radius: 7px; padding: 11px 18px; font-size: 1.13rem; font-weight: bold; cursor: pointer; margin-top: 12px; margin-bottom: 5px; transition: background 0.2s;}
+        button:hover, input[type="submit"]:hover { background: #e65100; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>संयोजक जोड़ें</h1>
+        <form id="coordinatorForm" autocomplete="off">
+            <div class="form-group">
+                <label for="eventSelect">कार्यक्रम का नाम</label>
+                <select id="eventSelect" required>
+                    <option value="">कार्यक्रम का नाम चुनें</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="coordMandal">मंडल</label>
+                <select id="coordMandal" required>
+                    <option value="">-- मंडल चुनें --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="coordName">संयोजक का नाम</label>
+                <input type="text" id="coordName" required placeholder="संयोजक का नाम">
+            </div>
+            <div class="form-group">
+                <label for="coordMobile">मोबाइल नंबर</label>
+                <input type="text" id="coordMobile" required placeholder="मोबाइल नंबर">
+            </div>
+            <div class="form-group">
+                <label for="coCoordName1">सह-संयोजक 1 का नाम</label>
+                <input type="text" id="coCoordName1" placeholder="सह-संयोजक 1 का नाम">
+            </div>
+            <div class="form-group">
+                <label for="coCoordMobile1">सह-संयोजक 1 का मोबाइल</label>
+                <input type="text" id="coCoordMobile1" placeholder="सह-संयोजक 1 का मोबाइल">
+            </div>
+            <div class="form-group">
+                <label for="coCoordName2">सह-संयोजक 2 का नाम</label>
+                <input type="text" id="coCoordName2" placeholder="सह-संयोजक 2 का नाम">
+            </div>
+            <div class="form-group">
+                <label for="coCoordMobile2">सह-संयोजक 2 का मोबाइल</label>
+                <input type="text" id="coCoordMobile2" placeholder="सह-संयोजक 2 का मोबाइल">
+            </div>
+            <button type="submit">संयोजक जोड़ें</button>
+        </form>
+    </div>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getFirestore, collection, addDoc, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCI1EL8iFVJnOWbd58Bq5JrJg_IgZuCvA0",
+            authDomain: "mandaleventall.firebaseapp.com",
+            projectId: "mandaleventall",
+            storageBucket: "mandaleventall.firebasestorage.app",
+            messagingSenderId: "900190130114",
+            appId: "1:900190130114:web:bc7d9e2283b3ac57bc505b",
+            measurementId: "G-2BBZZNRS88"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const mandals = ["भेंसोदा", "भानपुरा", "गरोठ", "मेलखेडा", "खड़ावदा", "शामगढ़", "सुवासरा", "बसाई", "सीतामऊ", "क्यामपुर", "सीतामऊ ग्रामीण", "गुर्जर बरडिया", "धुंधधड़का", "बुढा", "पिपलिया मंडी", "मल्हारगढ़", "दलोदा", "मगरामाता जी", "मंदसौर ग्रामीण", "मंदसौर उत्तर", "मंदसौर दक्षिण"];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const coordMandalSelect = document.getElementById('coordMandal');
+            mandals.forEach(mandal => {
+                const option = document.createElement('option');
+                option.value = mandal;
+                option.textContent = mandal;
+                coordMandalSelect.appendChild(option);
+            });
+            await loadEventNames();
+        });
+
+        async function loadEventNames() {
+            const eventSelect = document.getElementById('eventSelect');
+            eventSelect.innerHTML = '<option value="">कार्यक्रम का नाम चुनें</option>';
+            const querySnapshot = await getDocs(collection(db, "eventNames"));
+            querySnapshot.forEach((doc) => {
+                const eventName = doc.data().name;
+                const option = document.createElement('option');
+                option.value = doc.id;
+                option.textContent = eventName;
+                eventSelect.appendChild(option);
+            });
+        }
+
+        document.getElementById('coordinatorForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const eventNameId = document.getElementById('eventSelect').value;
+            const coordinatorData = {
+                eventNameId,
+                mandal: document.getElementById('coordMandal').value,
+                name: document.getElementById('coordName').value,
+                mobile: document.getElementById('coordMobile').value,
+                coCoordName1: document.getElementById('coCoordName1').value,
+                coCoordMobile1: document.getElementById('coCoordMobile1').value,
+                coCoordName2: document.getElementById('coCoordName2').value,
+                coCoordMobile2: document.getElementById('coCoordMobile2').value
+            };
+            try {
+                await addDoc(collection(db, `eventNames/${eventNameId}/coordinators`), coordinatorData);
+                alert("संयोजक जोड़ा गया!");
+                document.getElementById('coordinatorForm').reset();
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
