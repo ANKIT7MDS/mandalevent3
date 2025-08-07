@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <title>डैशबोर्ड (Master)</title>
+  <script>
+    async function loadHTML(id, file) {
+      const res = await fetch(file);
+      const text = await res.text();
+      document.getElementById(id).innerHTML = text;
+    }
+
+    window.onload = () => {
+      loadHTML("headContainer", "head.html").then(() => {
+        loadHTML("headerContainer", "header.html");
+        loadHTML("tabsContainer", "tabs.html");
+        loadHTML("eventsContainer", "events_tab.html");
+        loadHTML("coordinatorsContainer", "coordinators_tab.html");
+        loadHTML("reportsContainer", "reports_tab.html");
+        loadHTML("scriptsContainer", "scripts.html");
+      });
+    };
+  </script>
+</head>
+<body style="margin:0; padding:0; font-family:Arial, sans-serif;">
+  <div id="headContainer"></div>
+  <div id="headerContainer"></div>
+  <div id="tabsContainer"></div>
+  <div id="eventsContainer"></div>
+  <div id="coordinatorsContainer"></div>
+  <div id="reportsContainer"></div>
+  <div id="scriptsContainer"></div>
+</body>
+</html>
