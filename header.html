@@ -1,0 +1,43 @@
+<h1>डैशबोर्ड</h1>
+<div class="top-bar">
+<div class="left">
+<label for="filterEvent">कार्यक्रम:</label>
+<select id="filterEvent"><option value="">सभी कार्यक्रम</option></select>
+<label for="filterMandal">मंडल:</label>
+<select id="filterMandal"><option value="">सभी मंडल</option></select>
+<span class="pending-mandals" id="pendingMandals"></span>
+</div>
+<div class="right">
+<select id="exportDropdown" style="min-width:170px">
+<option value="">डेटा एक्सपोर्ट...</option>
+<optgroup label="संयुक्त (Combined)">
+<option value="combined-excel">संयुक्त Excel</option>
+<option value="combined-csv">संयुक्त CSV</option>
+<option value="combined-pdf">संयुक्त PDF</option>
+<option value="combined-jpg">संयुक्त JPG</option>
+</optgroup>
+<optgroup label="कार्यक्रम">
+<option value="events-excel">कार्यक्रम Excel</option>
+<option value="events-csv">कार्यक्रम CSV</option>
+<option value="events-pdf">कार्यक्रम PDF</option>
+<option value="events-jpg">कार्यक्रम JPG</option>
+</optgroup>
+<optgroup label="संयोजक">
+<option value="coordinators-excel">संयोजक Excel</option>
+<option value="coordinators-csv">संयोजक CSV</option>
+<option value="coordinators-pdf">संयोजक PDF</option>
+<option value="coordinators-jpg">संयोजक JPG</option>
+</optgroup>
+<optgroup label="रिपोर्ट">
+<option value="reports-excel">रिपोर्ट Excel</option>
+<option value="reports-csv">रिपोर्ट CSV</option>
+<option value="reports-pdf">रिपोर्ट PDF</option>
+<option value="reports-jpg">रिपोर्ट JPG</option>
+</optgroup>
+</select>
+<button onclick="handleExport()">डाउनलोड</button>
+<input id="newEventName" placeholder="कार्यक्रम नाम" style="width:120px;" type="text"/>
+<button onclick="addEventName()">जोड़ें</button>
+</div>
+</div>
+<div class="event-name-inline-list" id="eventNameListInline"></div>
